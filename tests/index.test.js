@@ -20,5 +20,5 @@ test("validate pagename contains '/newest' in the url", async ({ page }) => {
   const response = await page.goto("https://news.ycombinator.com/newest");
   const response_url = (response._initializer.url);
   // Expect the title to contain 'ycombinator'
-  expect(response_url).toContain('/old');
+  expect(response_url).toContain('/newest');
 });
