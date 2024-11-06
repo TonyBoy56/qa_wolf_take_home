@@ -33,12 +33,19 @@ test("validate upon pageload, the first 100 articles displayed are sorted in ord
   const dateElements = await page.locator('span.age[title]');
   // Get the count of date elements
   const count = await dateElements.count();
-  console.log("Tally of dateElements: ", count);
+  // console.log("Tally of dateElements: ", count);
+  
+  // Extract and parse all dates
+  let dates = [];
+  for (let i = 0; i < count; i++) {
+    const datetime = await dateElements.nth(i).getAttribute('title');
+    // Remove the numbers after the space from the dateString
+    const dateString = datetime.split(' ')[0];
 
-  // let dates = [];
-  // for (let i = 0; i < count; i++) {
-  //   const dateString = await dateElements.nth(i).getAttribute('datetime');
-  //   const date = new Date(dateString);
-  //   dates.push(date);
-  // }
+    // Parse the cleaned up date string
+    const date = new Date(dateString);
+    dates.push(date);
+    console.log(`Article ${i + 1} parsed date: ${date}`);
+    console.log("Dates Array: ", dates);
+  }
 });
