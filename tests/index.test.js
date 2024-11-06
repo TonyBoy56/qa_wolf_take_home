@@ -9,50 +9,36 @@ test("validate the page responds with 200 OK", async ({ page }) => {
   expect(response.status()).toBe(200);
 });
 
-test("validate pagename contains 'ycombinator' in the url", async ({ page }) => {
+test("validate pagename contains 'ycombinator' in the url", async ({
+  page,
+}) => {
   const response = await page.goto("https://news.ycombinator.com/newest");
-  const response_url = (response._initializer.url);
+  const response_url = response._initializer.url;
   // Expect the title to contain 'ycombinator'
-  expect(response_url).toContain('ycombinator');
+  expect(response_url).toContain("ycombinator");
 });
 
 test("validate pagename contains '/newest' in the url", async ({ page }) => {
   const response = await page.goto("https://news.ycombinator.com/newest");
-  const response_url = (response._initializer.url);
+  const response_url = response._initializer.url;
   // Expect the title to contain 'ycombinator'
-  expect(response_url).toContain('/newest');
+  expect(response_url).toContain("/newest");
 });
 
-test ("validate upon pageload, the first 100 articles displayed are sorted in order from newest to oldest", async ({ page }) => {
-  (async () => {
-    const createTagNameEngine = () => ({
-      query(root, selector){
-        return root.querySelector(selector);
-      }
-    })
-  });
-
+test("validate upon pageload, the first 100 articles displayed are sorted in order from newest to oldest", async ({
+  page,
+}) => {
   await page.goto("https://news.ycombinator.com/newest");
-  
-  // Retrieve the entire document of the webpage
-  const articles = await page.evaluate(() => document.body.innerHTML);
-  // show HTML content in the console
-  // console.log("Body HTML content:", articles);
+  // Locate all date elements inside article tags
+  const dateElements = await page.locator('span.age[title]');
+  // Get the count of date elements
+  const count = await dateElements.count();
+  console.log("Tally of dateElements: ", count);
 
-  const article_titles = await page.getAttribute(selectors, 'td.title');
-  console.log("Articles on pageload: ", article_titles);
-
-
-
-  // const articleElements = await page.$$eval('a.storylink', elements => elements.map(elements => elements.outerHTML));
-
-  // console.log("HTML of each article title element:", articleElements.forEach((html, index) => {
-  //   `${index + 1}: ${html}`;
-  // }));
-
-  // articleElements.forEach((html, index) => {
-  //   console.log(`${index + 1}: ${html}`);
-  // })
-
-
+  // let dates = [];
+  // for (let i = 0; i < count; i++) {
+  //   const dateString = await dateElements.nth(i).getAttribute('datetime');
+  //   const date = new Date(dateString);
+  //   dates.push(date);
+  // }
 });
