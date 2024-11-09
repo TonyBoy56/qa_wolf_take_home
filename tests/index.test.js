@@ -1,10 +1,9 @@
-const { test, expect, selectors } = require("@playwright/test");
+const { test, expect } = require("@playwright/test");
 
 // tests //
 
 test("validate the page responds with 200 OK", async ({ page }) => {
   const response = await page.goto("https://news.ycombinator.com/newest");
-
   // Expect the page to load with a 200 OK status
   expect(response.status()).toBe(200);
 });
@@ -40,13 +39,11 @@ test("validate upon pageload, the first 100 articles displayed are sorted in ord
     const dateElements = await page.locator('span.age[title]');
     // Get the count of date elements
     const count = await dateElements.count();
-    // console.log("Tally of dateElements: ", count);
 
     for (let i = 0; i < count; i++) {
       if (dateTimes.length >= targetArticleCount) break;
-      // Grab the matching nth locator of i, return value within 'title'attribute. Store value as datetime.
+      // Grab the matching nth locator of i, return value within 'title' attribute. Store value as datetime.
       const datetime = await dateElements.nth(i).getAttribute('title');
-      console.log("datetime variable: ",datetime)
 
       if (datetime) {
         // Remove the numbers after the space from the dateString
@@ -57,7 +54,6 @@ test("validate upon pageload, the first 100 articles displayed are sorted in ord
     }
 
     if (dateTimes.length >= targetArticleCount) break;
-
     // Find and click the "More" button to load more articles
     const moreButton = await page.locator('a.morelink');
     if (await moreButton.isVisible()) {
@@ -69,25 +65,17 @@ test("validate upon pageload, the first 100 articles displayed are sorted in ord
     }
   }
 
-  // Log the collected datetimes
-  // console.log("Collected dateTimes: ", dateTimes);
-  // console.log("Total timestamps collected: ", dateTimes.length);
-
   function isSorted(dateStrings) {
-
     const dates = dateStrings.map(dateString => new Date(dateString));
     
     for (let i = 1; i < dates.length - 1; i++) {
       if (dates[i] < dates[i + 1]) {
-        console.log(`Sorting error at index ${i}: ${dates[i]} is older than ${dates[i + 1]}`)
+        console.log(`Sorting error at index ${i}: ${dates[i]} is older than ${dates[i + 1]}`);
         return false;
       }
     }
     return true;
   }
 
-  // const sortingCheck = isSorted(dateTimes);
-  // console.log("Descending Order Sorting status: ", isSorted(dateTimes));
-  // console.log("Dates array: ", dateTimes);
   expect(isSorted(dateTimes)).toBe(true);
 });
