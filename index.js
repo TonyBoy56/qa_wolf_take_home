@@ -8,7 +8,7 @@ const server = require('./server');
 // Run Playwright tests
 function runTests() {
   return new Promise((resolve, reject) => {
-    exec('npx playwright test tests/index.test.js --reporter=line', (error, stdout, stderr) => {
+    exec('npx playwright test && npx playwright show-report', (error, stdout, stderr) => {
       if (error) {
         console.error(`Error running tests: ${error}`);
         reject(error);
