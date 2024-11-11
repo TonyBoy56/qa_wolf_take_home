@@ -2,9 +2,6 @@
 const { chromium } = require("playwright");
 const { exec } = require('child_process');
 
-const server = require('./server');
-
-
 // Run Playwright tests
 function runTests() {
   return new Promise((resolve, reject) => {
@@ -28,24 +25,8 @@ async function sortHackerNewsArticles() {
   
   // go to Hacker News
   await page.goto("https://news.ycombinator.com/newest");
+  await runTests();
 }
-
-// launch the server
-server.listen(3000, async () => {
-  console.log("Server running on http://localhost:3000");
-
-  try {
-    // run tests after the server starts
-    await runTests();
-  } catch (error) {
-    console.error("Tests failed:", error);
-  } finally {
-    // close the server after tests complete
-    server.close(() => {
-      console.log("Server closed.");
-    });
-  }
-});
 
 (async () => {
   await sortHackerNewsArticles();
