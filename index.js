@@ -25,6 +25,7 @@ async function sortHackerNewsArticles() {
   
   // go to Hacker News
   await page.goto("https://news.ycombinator.com/newest");
+  // execute function to run tests and show report of test results
   await runTests();
 }
 
